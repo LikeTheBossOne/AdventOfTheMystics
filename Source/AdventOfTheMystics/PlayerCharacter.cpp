@@ -5,6 +5,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "SwordsmanComponent.h"
+#include "Components/BoxComponent.h"
 
 APlayerCharacter::APlayerCharacter() : Super()
 {
@@ -15,6 +17,12 @@ APlayerCharacter::APlayerCharacter() : Super()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
+
+	SwordHitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Sword HitBox"));
+	SwordHitBox->SetupAttachment(RootComponent);
+	
+	SwordsmanComponent = CreateDefaultSubobject<USwordsmanComponent>(TEXT("Swordsman"));
+	AddOwnedComponent(SwordsmanComponent);
 
 	// Don't Rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
@@ -56,6 +64,21 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &APlayerCharacter::MoveRight);
 	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis(TEXT("LookRight"), this, &APawn::AddControllerYawInput);
+	PlayerInputComponent->BindAction(TEXT("USE"), IE_Pressed, this, &APlayerCharacter::Use);
+}
+
+UBoxComponent* APlayerCharacter::GetSwordHitBox()
+{
+	return SwordHitBox;
+}
+
+void APlayerCharacter::Use()
+{
+	if (SwordsmanComponent == nullptr) UE_LOG(LogTemp, Error, TEXT("COULDN'T MAKE COMP"));
+	if (SwordsmanComponent)
+	{
+		SwordsmanComponent->UseWeapon();
+	}
 }
 
 
@@ -84,6 +107,6 @@ void APlayerCharacter::MoveRight(float AxisValue)
 		// get right vector 
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 		// add movement in that direction
-		AddMovementInput(Direction, AxisValue);
+		AddMovementInput(Direction, AxisValue * Attributes.CurrentAgility / GetWorld()->GetDeltaSeconds());
 	}
 }
