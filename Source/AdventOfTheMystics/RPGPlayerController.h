@@ -14,6 +14,7 @@ class ADVENTOFTHEMYSTICS_API ARPGPlayerController : public APlayerController
 	GENERATED_BODY()
 public:
 	void BeginPlay() override;
+	virtual void AcknowledgePossession(APawn* P) override;
 	
 private:
 	UPROPERTY(EditAnywhere)

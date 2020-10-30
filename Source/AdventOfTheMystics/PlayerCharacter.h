@@ -6,9 +6,8 @@
 #include "RPGCharacter.h"
 #include "PlayerCharacter.generated.h"
 
-/**
- * 
- */
+
+class UAbilitySystemComponent;
 UCLASS()
 class ADVENTOFTHEMYSTICS_API APlayerCharacter : public ARPGCharacter
 {

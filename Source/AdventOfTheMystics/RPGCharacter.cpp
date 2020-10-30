@@ -2,6 +2,7 @@
 
 
 #include "RPGCharacter.h"
+#include "AbilitySystemComponent.h"
 
 // Sets default values
 ARPGCharacter::ARPGCharacter()
@@ -9,6 +10,8 @@ ARPGCharacter::ARPGCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	AbilitySystem = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystem"));
+	AbilitySystem->SetIsReplicated(true);
 }
 
 // Called when the game starts or when spawned
@@ -21,6 +24,18 @@ void ARPGCharacter::BeginPlay()
 	Attributes.CurrentAttack = Attributes.BaseAttack;
 	Attributes.CurrentMagicPower = Attributes.BaseMagicPower;
 	Attributes.CurrentAgility = Attributes.BaseAgility;
+}
+
+void ARPGCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	if (AbilitySystem)
+	{
+		AbilitySystem->InitAbilityActorInfo(this, this);
+	}
+
+	SetOwner(NewController);
 }
 
 // Called every frame
@@ -36,6 +51,8 @@ void ARPGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 }
+
+
 
 
 float ARPGCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "AbilitySystemInterface.h"
 #include "RPGCharacter.generated.h"
 
 USTRUCT(BlueprintType)
@@ -39,7 +40,7 @@ public:
 };
 
 UCLASS()
-class ADVENTOFTHEMYSTICS_API ARPGCharacter : public ACharacter
+class ADVENTOFTHEMYSTICS_API ARPGCharacter : public ACharacter, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
@@ -47,6 +48,13 @@ public:
 	ARPGCharacter();
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual void PossessedBy(AController* NewController) override;
+
+	/** Overrides from IAbilitySystemInterface */
+	UAbilitySystemComponent* GetAbilitySystemComponent() const override
+	{
+		return AbilitySystem;
+	};
 	
 	UFUNCTION(BlueprintCallable)
 	float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
@@ -65,4 +73,8 @@ protected:
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FCharacterAttributes Attributes;
+
+private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Abilities", meta = (AllowPrivateAccess = "true"))
+	UAbilitySystemComponent* AbilitySystem;
 };

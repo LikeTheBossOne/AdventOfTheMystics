@@ -24,6 +24,7 @@ APlayerCharacter::APlayerCharacter() : Super()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f);
 
+	
 	// Setup Default Player Stats
 	Attributes.BaseHealth = 100.f;
 	Attributes.BaseMana = 100.f;
