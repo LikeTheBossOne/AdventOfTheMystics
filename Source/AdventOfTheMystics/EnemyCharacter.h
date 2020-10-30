@@ -6,12 +6,9 @@
 #include "NPCCharacter.h"
 #include "EnemyCharacter.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class ADVENTOFTHEMYSTICS_API AEnemyCharacter : public ANPCCharacter
 {
 	GENERATED_BODY()
-	
+public:
 };

@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "DataTableEditor/Private/SRowEditor.h"
 #include "RPGCharacter.generated.h"
 
 USTRUCT(BlueprintType)
@@ -48,16 +47,18 @@ public:
 	ARPGCharacter();
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
+	
 	UFUNCTION(BlueprintCallable)
-	void TakeDamage(float BaseDamageAmount);
+	float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 	
 	UFUNCTION(BlueprintPure)
 	float GetHealthPercent() const;
 
 	UFUNCTION(BlueprintPure)
 	float GetManaPercent() const;
-	
+
+	UFUNCTION(BlueprintCallable)
+	float GetCurrentAttack() const;
 protected:
 	virtual void BeginPlay() override;
 	

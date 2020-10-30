@@ -15,7 +15,12 @@ ARPGCharacter::ARPGCharacter()
 void ARPGCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	Attributes.CurrentHealth = Attributes.BaseHealth;
+	Attributes.CurrentMana = Attributes.BaseMana;
+	Attributes.CurrentAttack = Attributes.BaseAttack;
+	Attributes.CurrentMagicPower = Attributes.BaseMagicPower;
+	Attributes.CurrentAgility = Attributes.BaseAgility;
 }
 
 // Called every frame
@@ -32,9 +37,17 @@ void ARPGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 }
 
-void ARPGCharacter::TakeDamage(float BaseDamageAmount)
+
+float ARPGCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
+	AActor* DamageCauser)
 {
-	Attributes.CurrentHealth -= BaseDamageAmount;
+	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	Attributes.CurrentHealth -= DamageAmount;
+
+	UE_LOG(LogTemp, Warning, TEXT("%s took %f damage"), *GetName(), DamageAmount);
+	// Returns the amount of damage actually applied
+	return DamageAmount;
 }
 
 float ARPGCharacter::GetHealthPercent() const
@@ -45,5 +58,10 @@ float ARPGCharacter::GetHealthPercent() const
 float ARPGCharacter::GetManaPercent() const
 {
 	return Attributes.CurrentMana / Attributes.BaseMana;
+}
+
+float ARPGCharacter::GetCurrentAttack() const
+{
+	return Attributes.CurrentAttack;
 }
 
