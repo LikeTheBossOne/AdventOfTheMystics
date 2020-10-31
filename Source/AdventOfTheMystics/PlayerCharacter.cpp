@@ -5,6 +5,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "AttributeSetBase.h"
 
 APlayerCharacter::APlayerCharacter() : Super()
 {
@@ -26,11 +27,6 @@ APlayerCharacter::APlayerCharacter() : Super()
 
 	
 	// Setup Default Player Stats
-	Attributes.BaseHealth = 100.f;
-	Attributes.BaseMana = 100.f;
-	Attributes.BaseAttack = 5.f;
-	Attributes.BaseMagicPower = 5.f;
-	Attributes.BaseAgility = 5.f;
 }
 
 void APlayerCharacter::BeginPlay()
@@ -70,7 +66,7 @@ void APlayerCharacter::MoveForward(float AxisValue)
 
 		// get forward vector
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-		AddMovementInput(Direction, AxisValue * Attributes.CurrentAgility / GetWorld()->GetDeltaSeconds());
+		AddMovementInput(Direction, AxisValue * 5 / GetWorld()->GetDeltaSeconds());
 	}
 }
 
@@ -85,6 +81,6 @@ void APlayerCharacter::MoveRight(float AxisValue)
 		// get right vector 
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 		// add movement in that direction
-		AddMovementInput(Direction, AxisValue * Attributes.CurrentAgility / GetWorld()->GetDeltaSeconds());
+		AddMovementInput(Direction, AxisValue * 5 / GetWorld()->GetDeltaSeconds());
 	}
 }

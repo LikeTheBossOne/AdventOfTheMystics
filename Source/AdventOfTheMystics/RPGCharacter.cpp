@@ -2,7 +2,10 @@
 
 
 #include "RPGCharacter.h"
-#include "AbilitySystemComponent.h"
+#include "RPGAbilitySystemComponent.h"
+#include "AttributeSetBase.h"
+#include "RPGGameplayAbility.h"
+#include <GameplayEffectTypes.h>
 
 // Sets default values
 ARPGCharacter::ARPGCharacter()
@@ -10,20 +13,21 @@ ARPGCharacter::ARPGCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	AbilitySystem = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystem"));
+	AbilitySystem = CreateDefaultSubobject<URPGAbilitySystemComponent>(TEXT("AbilitySystem"));
 	AbilitySystem->SetIsReplicated(true);
+	AbilitySystem->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
+
+	AttributeSet = CreateDefaultSubobject<UAttributeSetBase>("Attributes");
 }
 
 // Called when the game starts or when spawned
 void ARPGCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
-	Attributes.CurrentHealth = Attributes.BaseHealth;
-	Attributes.CurrentMana = Attributes.BaseMana;
-	Attributes.CurrentAttack = Attributes.BaseAttack;
-	Attributes.CurrentMagicPower = Attributes.BaseMagicPower;
-	Attributes.CurrentAgility = Attributes.BaseAgility;
+	if (AbilitySystem)
+	{
+		AbilitySystem->InitAbilityActorInfo(this, this);
+	}
 }
 
 void ARPGCharacter::PossessedBy(AController* NewController)
@@ -33,9 +37,65 @@ void ARPGCharacter::PossessedBy(AController* NewController)
 	if (AbilitySystem)
 	{
 		AbilitySystem->InitAbilityActorInfo(this, this);
+		InitializeAttributes();
+		GiveAbilities();
 	}
 
 	SetOwner(NewController);
+}
+
+void ARPGCharacter::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+
+	AbilitySystem->InitAbilityActorInfo(this, this);
+	InitializeAttributes();
+
+	if (AbilitySystem && InputComponent)
+	{
+		const FGameplayAbilityInputBinds Binds(
+			"Confirm",
+			"Cancel",
+			"ERPGAbilityInputID",
+			static_cast<int32>(ERPGAbilityInputID::Confirm),
+			static_cast<int32>(ERPGAbilityInputID::Cancel)
+		);
+		AbilitySystem->BindAbilityActivationToInputComponent(InputComponent, Binds);
+	}
+}
+
+void ARPGCharacter::InitializeAttributes()
+{
+	if (AbilitySystem && DefaultAttributeEffect)
+	{
+		FGameplayEffectContextHandle EffectContext = AbilitySystem->MakeEffectContext();
+		EffectContext.AddSourceObject(this);
+
+		FGameplayEffectSpecHandle SpecHandle = AbilitySystem->MakeOutgoingSpec(DefaultAttributeEffect, 1, EffectContext);
+
+		if (SpecHandle.IsValid())
+		{
+			FActiveGameplayEffectHandle GEHandle = AbilitySystem->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+		}
+	}
+}
+
+void ARPGCharacter::GiveAbilities()
+{
+	if (HasAuthority() && AbilitySystem)
+	{
+		for (TSubclassOf<URPGGameplayAbility>& StartupAbility : DefaultAbilities)
+		{
+			AbilitySystem->GiveAbility(
+				FGameplayAbilitySpec(StartupAbility, 1, static_cast<int32>(StartupAbility.GetDefaultObject()->AbilityInputID), this)
+			);
+		}
+	}
+}
+
+UAbilitySystemComponent* ARPGCharacter::GetAbilitySystemComponent() const
+{
+	return AbilitySystem;
 }
 
 // Called every frame
@@ -50,6 +110,17 @@ void ARPGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	if (AbilitySystem && InputComponent)
+	{
+		const FGameplayAbilityInputBinds Binds(
+			"Confirm",
+			"Cancel",
+			"ERPGAbilityInputID",
+			static_cast<int32>(ERPGAbilityInputID::Confirm),
+			static_cast<int32>(ERPGAbilityInputID::Cancel)
+		);
+		AbilitySystem->BindAbilityActivationToInputComponent(InputComponent, Binds);
+	}
 }
 
 
@@ -60,7 +131,7 @@ float ARPGCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 {
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	Attributes.CurrentHealth -= DamageAmount;
+	// Attributes.CurrentHealth -= DamageAmount;
 
 	UE_LOG(LogTemp, Warning, TEXT("%s took %f damage"), *GetName(), DamageAmount);
 	// Returns the amount of damage actually applied
@@ -69,16 +140,41 @@ float ARPGCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 
 float ARPGCharacter::GetHealthPercent() const
 {
-	return Attributes.CurrentHealth / Attributes.BaseHealth;
+	return GetHealth() / GetMaxHealth();
 }
 
 float ARPGCharacter::GetManaPercent() const
 {
-	return Attributes.CurrentMana / Attributes.BaseMana;
+	return GetMana() / GetMaxMana();
 }
 
-float ARPGCharacter::GetCurrentAttack() const
+float ARPGCharacter::GetHealth() const
 {
-	return Attributes.CurrentAttack;
+	return AttributeSet->GetHealth();
+}
+
+float ARPGCharacter::GetMaxHealth() const
+{
+	return AttributeSet->GetMaxHealth();
+}
+
+float ARPGCharacter::GetMana() const
+{
+	return AttributeSet->GetMana();
+}
+
+float ARPGCharacter::GetMaxMana() const
+{
+	return AttributeSet->GetMaxMana();
+}
+
+float ARPGCharacter::GetAttack() const
+{
+	return AttributeSet->GetAttack();
+}
+
+float ARPGCharacter::GetMagicPower() const
+{
+	return AttributeSet->GetMagicPower();
 }
 
