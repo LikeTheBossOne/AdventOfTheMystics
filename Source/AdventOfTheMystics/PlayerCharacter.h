@@ -3,13 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "RPGCharacter.h"
+#include "FightingCharacter.h"
 #include "PlayerCharacter.generated.h"
 
 
 class UAbilitySystemComponent;
 UCLASS()
-class ADVENTOFTHEMYSTICS_API APlayerCharacter : public ARPGCharacter
+class ADVENTOFTHEMYSTICS_API APlayerCharacter : public AFightingCharacter
 {
 	GENERATED_BODY()
 public:
