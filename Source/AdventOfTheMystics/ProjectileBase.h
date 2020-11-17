@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "GameplayEffectTypes.h"
+#include "GameplayEffect.h"
 #include "ProjectileBase.generated.h"
 
 UCLASS()
@@ -19,18 +21,18 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+	
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 		class UProjectileMovementComponent* ProjectileMovement;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
-		class USceneComponent* ProjectileDirection;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
-		UStaticMeshComponent* ProjectileMesh;
-	UPROPERTY(EditDefaultsOnly, Category = "Damage", meta = (AllowPrivateAccess = "true"))
-		TSubclassOf<UDamageType> DamageType;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"))
-		float MovementSpeed = 1300;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Damage", meta = (AllowPrivateAccess = "true"))
-		float Damage = 50;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GameplayEffects", meta = (AllowPrivateAccess = "true", ExposeOnSpawn = "true"))
+		TArray<TSubclassOf<UGameplayEffect>> EffectsToApply;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Effects", meta = (AllowPrivateAccess = "true"))
+		class UParticleSystem* CollisionEffect;
+
+	UPROPERTY()
+	TArray<AActor*> HitActors;
 };

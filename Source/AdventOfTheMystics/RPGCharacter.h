@@ -7,6 +7,7 @@
 #include "AbilitySystemInterface.h"
 #include "RPGCharacter.generated.h"
 
+struct FOnAttributeChangeData;
 class URPGAbilitySystemComponent;
 class UAbilitySystemComponent;
 
@@ -24,12 +25,14 @@ public:
 
 	virtual void InitializeAttributes();
 	virtual void GiveAbilities();
+
+	virtual void HealthChanged(const FOnAttributeChangeData& Data);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void AfterHealthChanged();
 	
 	/** Overrides from IAbilitySystemInterface */
 	UAbilitySystemComponent* GetAbilitySystemComponent() const override;
-	
-	UFUNCTION(BlueprintCallable)
-	float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 	
 	UFUNCTION(BlueprintPure)
 	float GetHealthPercent() const;
@@ -68,7 +71,7 @@ public:
 	TArray<TSubclassOf<class URPGGameplayAbility>> DefaultAbilities;
 	
 protected:
-	UPROPERTY(BlueprintReadOnly, Category = "Attribute Set")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Attribute Set")
 	class UAttributeSetBase* AttributeSet;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Abilities", meta = (AllowPrivateAccess = "true"))

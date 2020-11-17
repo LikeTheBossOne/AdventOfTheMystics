@@ -14,10 +14,41 @@ void UBTService_PlayerLocation::TickNode(UBehaviorTreeComponent& OwnerComp, uint
 {
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 
-	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
-	if (PlayerPawn)
+	AActor* SelfActor = Cast<AActor>(OwnerComp.GetBlackboardComponent()->GetValueAsObject("SelfActor"));
+	if (!SelfActor)
 	{
-		OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), PlayerPawn->GetActorLocation());
+		UE_LOG(LogTemp, Warning, TEXT("AI couldn't find SelfActor"));
+		return;
+	}
+	FVector SelfLocation = SelfActor->GetActorLocation();
+	
+	float Closest = TNumericLimits<float>::Max();
+	APawn* ClosestPawn = nullptr;
+	
+	for (FConstPlayerControllerIterator Iterator = GetWorld()->GetPlayerControllerIterator(); Iterator; ++Iterator)
+	{
+		APlayerController* PlayerController = Iterator->Get(false);
+		if (PlayerController)
+		{
+			APawn* Player = PlayerController->GetPawn();
+			if (Player)
+			{
+				FVector PlayerLocation = Player->GetActorLocation();
+				float Dist = FVector::Dist(PlayerLocation, SelfLocation);
+				
+				if (Dist < Closest)
+				{
+					Closest = Dist;
+					ClosestPawn = Player;
+				}
+			}
+		}
+	}
+	
+	// APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+	if (ClosestPawn)
+	{
+		OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), ClosestPawn->GetActorLocation());
 	}
 	
 }

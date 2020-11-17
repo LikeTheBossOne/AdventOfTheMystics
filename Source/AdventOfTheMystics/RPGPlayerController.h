@@ -16,9 +16,10 @@ public:
 	void BeginPlay() override;
 	virtual void AcknowledgePossession(APawn* P) override;
 	
-private:
+protected:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UUserWidget> HUDClass;
-	
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UUserWidget* HUD;
 };

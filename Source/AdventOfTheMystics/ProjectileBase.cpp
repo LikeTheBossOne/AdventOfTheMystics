@@ -3,29 +3,51 @@
 
 #include "ProjectileBase.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "RPGCharacter.h"
+#include "AbilitySystemComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Abilities/GameplayAbility.h"
+#include "Particles/ParticleSystem.h"
+#include "FightingCharacter.h"
 
 // Sets default values
 AProjectileBase::AProjectileBase()
 {
-	PrimaryActorTick.bCanEverTick = false;
-
-	ProjectileDirection = CreateDefaultSubobject<USceneComponent>(TEXT("Projectile Direction"));
-	RootComponent = ProjectileDirection;
-
-	ProjectileMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Projectile Mesh"));
-	ProjectileMesh->SetupAttachment(RootComponent);
+	PrimaryActorTick.bCanEverTick = true;
 
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Projectile Movement"));
-	ProjectileMovement->InitialSpeed = MovementSpeed;
-	ProjectileMovement->MaxSpeed = MovementSpeed;
-
-	InitialLifeSpan = 3.0f;
 }
 
 // Called when the game starts or when spawned
 void AProjectileBase::BeginPlay()
 {
 	Super::BeginPlay();
+}
 
+void AProjectileBase::NotifyActorBeginOverlap(AActor* OtherActor)
+{
+	Super::NotifyActorBeginOverlap(OtherActor);
+
+	// if (!GetInstigator()->IsA(ARPGCharacter::StaticClass())) return;
+	//
+	// if (HitActors.Contains(OtherActor)) return;
+	// if (OtherActor == GetInstigator()) return;
+	//
+	// HitActors.Add(OtherActor);
+	//
+	// ARPGCharacter* Instig = Cast<ARPGCharacter>(GetInstigator());
+	// if (OtherActor->IsA(ARPGCharacter::StaticClass()))
+	// {
+	// 	for (TSubclassOf<UGameplayEffect> Effect : EffectsToApply)
+	// 	{
+	// 		FGameplayEffectSpecHandle Spec = Instig->GetAbilitySystemComponent()->MakeOutgoingSpec(Effect, 1.f, Instig->GetAbilitySystemComponent()->MakeEffectContext());
+	// 		Instig->GetAbilitySystemComponent()->ApplyGameplayEffectSpecToTarget(*Spec.Data.Get(), Cast<ARPGCharacter>(OtherActor)->GetAbilitySystemComponent());
+	// 	}
+	//
+	// 	if (CollisionEffect)
+	// 	{
+	// 		UGameplayStatics::SpawnEmitterAtLocation(this, CollisionEffect, GetActorLocation());
+	// 	}
+	// }
 }
 

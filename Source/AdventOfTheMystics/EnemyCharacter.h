@@ -10,5 +10,5 @@ UCLASS()
 class ADVENTOFTHEMYSTICS_API AEnemyCharacter : public AFightingCharacter
 {
 	GENERATED_BODY()
-public:
+	
 };

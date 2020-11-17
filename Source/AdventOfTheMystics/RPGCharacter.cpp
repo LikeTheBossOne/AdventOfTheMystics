@@ -16,6 +16,7 @@ ARPGCharacter::ARPGCharacter()
 	AbilitySystem = CreateDefaultSubobject<URPGAbilitySystemComponent>(TEXT("AbilitySystem"));
 	AbilitySystem->SetIsReplicated(true);
 	AbilitySystem->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
+	AbilitySystem->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetHealthAttribute()).AddUObject(this, &ARPGCharacter::HealthChanged);
 
 	AttributeSet = CreateDefaultSubobject<UAttributeSetBase>("Attributes");
 }
@@ -93,6 +94,17 @@ void ARPGCharacter::GiveAbilities()
 	}
 }
 
+void ARPGCharacter::HealthChanged(const FOnAttributeChangeData& Data)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Health Changed!"));
+
+	if (Data.NewValue <= 0)
+	{
+		Destroy();
+	}
+	AfterHealthChanged();
+}
+
 UAbilitySystemComponent* ARPGCharacter::GetAbilitySystemComponent() const
 {
 	return AbilitySystem;
@@ -123,20 +135,6 @@ void ARPGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	}
 }
 
-
-
-
-float ARPGCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
-	AActor* DamageCauser)
-{
-	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-
-	// Attributes.CurrentHealth -= DamageAmount;
-
-	UE_LOG(LogTemp, Warning, TEXT("%s took %f damage"), *GetName(), DamageAmount);
-	// Returns the amount of damage actually applied
-	return DamageAmount;
-}
 
 float ARPGCharacter::GetHealthPercent() const
 {
