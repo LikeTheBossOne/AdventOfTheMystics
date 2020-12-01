@@ -27,9 +27,11 @@ public:
 	virtual void GiveAbilities();
 
 	virtual void HealthChanged(const FOnAttributeChangeData& Data);
-
 	UFUNCTION(BlueprintImplementableEvent)
 	void AfterHealthChanged();
+
+	UFUNCTION(BlueprintCallable, Category = "Item")
+	void UseItem(class URPGItem* Item);
 	
 	/** Overrides from IAbilitySystemInterface */
 	UAbilitySystemComponent* GetAbilitySystemComponent() const override;

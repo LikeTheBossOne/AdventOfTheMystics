@@ -6,13 +6,14 @@
 #include "AIController.h"
 #include "AbilitySystemComponent.h"
 #include "RPGGameplayAbility.h"
+#include "BehaviorTree/BlackboardComponent.h"
 
 EBTNodeResult::Type UBTTask_ExecuteAbility::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	ARPGCharacter* OwnerCharacter = Cast<ARPGCharacter>(OwnerComp.GetAIOwner()->GetPawn());
 	if (OwnerCharacter)
 	{
-		FGameplayAbilitySpec* Spec = OwnerCharacter->GetAbilitySystemComponent()->FindAbilitySpecFromInputID(static_cast<int32>(ERPGAbilityInputID::Punch));
+		FGameplayAbilitySpec* Spec = OwnerCharacter->GetAbilitySystemComponent()->FindAbilitySpecFromClass(Ability);
 		OwnerCharacter->GetAbilitySystemComponent()->TryActivateAbility(Spec->Handle);
 	}
 	

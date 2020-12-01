@@ -6,6 +6,7 @@
 #include "AttributeSetBase.h"
 #include "RPGGameplayAbility.h"
 #include <GameplayEffectTypes.h>
+#include "Public/RPGItem.h"
 
 // Sets default values
 ARPGCharacter::ARPGCharacter()
@@ -103,6 +104,15 @@ void ARPGCharacter::HealthChanged(const FOnAttributeChangeData& Data)
 		Destroy();
 	}
 	AfterHealthChanged();
+}
+
+void ARPGCharacter::UseItem(URPGItem* Item)
+{
+	if (Item)
+	{
+		Item->Use(this);
+		Item->OnUse(this); // BP Event
+	}
 }
 
 UAbilitySystemComponent* ARPGCharacter::GetAbilitySystemComponent() const
