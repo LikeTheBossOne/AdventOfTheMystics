@@ -33,4 +33,6 @@ private:
 	class UCameraComponent* FollowCamera;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	class URPGInventoryComponent* Inventory;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
+	class URPGInventoryComponent* HotbarInventory;
 };

@@ -27,16 +27,15 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	UPROPERTY(EditDefaultsOnly, Category = "Inventory")
+	UPROPERTY(EditDefaultsOnly, Category = "Items")
 	int MaxSize;
 
 	UPROPERTY(BlueprintAssignable, Category = "Inventory")
 	FOnInventoryUpdated OnInventoryUpdated;
 	
-	UPROPERTY(EditDefaultsOnly, Instanced)
+	UPROPERTY(EditDefaultsOnly, Instanced, Category = "Items")
 	TArray<class URPGItem*> DefaultItems;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Items")
 	TArray<class URPGItem*> Items;
-	
 };

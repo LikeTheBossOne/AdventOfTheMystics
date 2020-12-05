@@ -21,6 +21,9 @@ APlayerCharacter::APlayerCharacter() : Super()
 	Inventory = CreateDefaultSubobject<URPGInventoryComponent>(TEXT("Inventory"));
 	Inventory->MaxSize = 20;
 
+	HotbarInventory = CreateDefaultSubobject<URPGInventoryComponent>(TEXT("HotbarInventory"));
+	HotbarInventory->MaxSize = 5;
+
 	
 	// Don't Rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
