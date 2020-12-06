@@ -5,7 +5,7 @@
 
 URPGItem::URPGItem()
 {
-	DisplayName = FText::FromString("Item");
+	Name = FText::FromString("Item");
 	UseActionText = FText::FromString("Use");
 }
 

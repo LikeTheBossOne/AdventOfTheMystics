@@ -33,7 +33,7 @@ public:
 	FText UseActionText;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Item")
-	FText DisplayName;
+	FText Name;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Item")
 	FText Description;
