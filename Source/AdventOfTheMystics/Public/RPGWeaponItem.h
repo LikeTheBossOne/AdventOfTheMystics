@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "RPGItem.h"
-#include "AdventOfTheMystics/RPGGameplayAbility.h"
+#include "RPGGameplayAbility.h"
 #include "RPGWeaponItem.generated.h"
 
 /**

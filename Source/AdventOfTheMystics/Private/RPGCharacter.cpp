@@ -6,7 +6,7 @@
 #include "AttributeSetBase.h"
 #include "RPGGameplayAbility.h"
 #include <GameplayEffectTypes.h>
-#include "Public/RPGItem.h"
+#include "RPGItem.h"
 
 // Sets default values
 ARPGCharacter::ARPGCharacter()

@@ -2,8 +2,8 @@
 
 
 #include "RPGWeaponItem.h"
-#include "AdventOfTheMystics/RPGCharacter.h"
-#include "AdventOfTheMystics/RPGAbilitySystemComponent.h"
+#include "RPGCharacter.h"
+#include "RPGAbilitySystemComponent.h"
 
 void URPGWeaponItem::Use(ARPGCharacter* Character)
 {

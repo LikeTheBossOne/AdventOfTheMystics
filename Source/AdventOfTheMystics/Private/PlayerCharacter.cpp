@@ -6,7 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "AttributeSetBase.h"
-#include "Public/RPGInventoryComponent.h"
+#include "RPGInventoryComponent.h"
 
 APlayerCharacter::APlayerCharacter() : Super()
 {
