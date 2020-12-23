@@ -44,6 +44,7 @@ public:
 	UPROPERTY()
 	class URPGInventoryComponent* OwningInventory;
 
-	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item")
+	TSubclassOf<class ARPGItemActor> ItemActor;
 	
 };
