@@ -6,7 +6,7 @@
 #include "FightingCharacter.h"
 #include "PlayerCharacter.generated.h"
 
-
+class URPGInventoryComponent;
 class UAbilitySystemComponent;
 UCLASS()
 class ADVENTOFTHEMYSTICS_API APlayerCharacter : public AFightingCharacter
@@ -16,6 +16,9 @@ public:
 	APlayerCharacter();
 	void Tick(float DeltaSeconds) override;
 	void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
+
+	URPGInventoryComponent* GetInventory() { return Inventory; }
+	URPGInventoryComponent* GetHandInventory() { return HandInventory; }
 	
 	void Use();
 	
@@ -25,14 +28,14 @@ protected:
 private:
 	void MoveForward(float AxisValue);
 	void MoveRight(float AxisValue);
-
+	
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* CameraBoom;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
-	class URPGInventoryComponent* Inventory;
+	URPGInventoryComponent* Inventory;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
-	class URPGInventoryComponent* HotbarInventory;
+	URPGInventoryComponent* HandInventory;
 };

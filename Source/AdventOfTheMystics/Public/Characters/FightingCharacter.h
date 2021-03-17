@@ -67,6 +67,10 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category = "Attributes")
 	float GetMagicPower() const;
+
+private:
+	void RegenAttributes();
+	
 public:
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Abilities")
 	TSubclassOf<class UGameplayEffect> DefaultAttributeEffect;
@@ -84,4 +88,7 @@ protected:
 	UAnimMontage* ReceiveHitMontage;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Abilities")
 	UAnimMontage* PunchMontage;
+
+	UPROPERTY()
+	FTimerHandle RegenTimerHandle;
 };

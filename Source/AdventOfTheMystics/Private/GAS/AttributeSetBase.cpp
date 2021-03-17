@@ -9,8 +9,10 @@ UAttributeSetBase::UAttributeSetBase()
 {
 	Health = FGameplayAttributeData(100.f);
 	MaxHealth = FGameplayAttributeData(100.f);
+	HealthRegenRate = FGameplayAttributeData(1.f);
 	Mana = FGameplayAttributeData(100.f);
 	MaxMana = FGameplayAttributeData(100.f);
+	ManaRegenRate = FGameplayAttributeData(1.f);
 	Attack = FGameplayAttributeData(5.f);
 	MagicPower = FGameplayAttributeData(5.f);
 }
@@ -47,8 +49,10 @@ void UAttributeSetBase::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& 
 
 	DOREPLIFETIME_CONDITION_NOTIFY(UAttributeSetBase, Health, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UAttributeSetBase, MaxHealth, COND_None, REPNOTIFY_Always);
+	//DOREPLIFETIME_CONDITION_NOTIFY(UAttributeSetBase, HealthRegenRate, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UAttributeSetBase, Mana, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UAttributeSetBase, MaxMana, COND_None, REPNOTIFY_Always);
+	//DOREPLIFETIME_CONDITION_NOTIFY(UAttributeSetBase, ManaRegenRate, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UAttributeSetBase, Attack, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UAttributeSetBase, MagicPower, COND_None, REPNOTIFY_Always);
 }

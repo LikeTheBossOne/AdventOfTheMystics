@@ -23,6 +23,21 @@ void URPGInventoryComponent::BeginPlay()
 	}
 }
 
+bool URPGInventoryComponent::InsertItem(URPGItem* Item, int Index)
+{
+	if (Items.Num() >= MaxSize || !Item)
+	{
+		return false;
+	}
+
+	Item->OwningInventory = this;
+	Item->World = GetWorld();
+	Items.Insert(Item, Index);
+	
+	OnInventoryUpdated.Broadcast();
+
+	return true;
+}
 
 bool URPGInventoryComponent::AddItem(URPGItem* Item)
 {
@@ -52,4 +67,45 @@ bool URPGInventoryComponent::RemoveItem(URPGItem* Item)
 	}
 	
 	return false;
+}
+
+URPGItem* URPGInventoryComponent::RemoveItemAtIndex(int Index)
+{
+	if (Items.Num() >= MaxSize || Index >= MaxSize)
+	{
+		return nullptr;
+	}
+
+	URPGItem* OldItem = Items[Index];
+	if (OldItem)
+	{
+		OldItem->OwningInventory = nullptr;
+		OldItem->World = nullptr;
+		Items.RemoveSingle(OldItem);
+		OnInventoryUpdated.Broadcast();
+		return OldItem;
+	}
+	
+	return false;
+}
+
+URPGItem* URPGInventoryComponent::ReplaceItem(URPGItem* ItemToAdd, int indexToReplace)
+{
+	if (ItemToAdd)
+	{
+		ItemToAdd->OwningInventory = this;
+		ItemToAdd->World = GetWorld();
+		
+		URPGItem* OldItem = Items[indexToReplace];
+		Items[indexToReplace] = ItemToAdd;
+
+		OldItem->OwningInventory = nullptr;
+		OldItem->World = nullptr;
+
+		OnInventoryUpdated.Broadcast();
+		
+		return OldItem;
+	}
+
+	return nullptr;
 }

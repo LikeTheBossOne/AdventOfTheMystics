@@ -27,6 +27,7 @@ void AFightingCharacter::BeginPlay()
 	{
 		AbilitySystem->InitAbilityActorInfo(this, this);
 	}
+	GetWorldTimerManager().SetTimer(RegenTimerHandle, this, &AFightingCharacter::RegenAttributes, 0.5f, true, 0.5f);
 }
 
 void AFightingCharacter::PossessedBy(AController* NewController)
@@ -94,8 +95,6 @@ void AFightingCharacter::GiveAbilities()
 
 void AFightingCharacter::HealthChanged(const FOnAttributeChangeData& Data)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Health Changed!"));
-
 	if (Data.NewValue <= 0)
 	{
 		Destroy();
@@ -184,4 +183,17 @@ float AFightingCharacter::GetAttack() const
 float AFightingCharacter::GetMagicPower() const
 {
 	return AttributeSet->GetMagicPower();
+}
+
+void AFightingCharacter::RegenAttributes()
+{
+	UE_LOG(LogTemp, Warning, TEXT("H: %f/%F M: %f/%f"), GetHealth(), GetMaxHealth(), GetMana(), GetMaxMana());
+	if (GetHealth() < GetMaxHealth())
+	{
+		AttributeSet->SetHealth(FMath::Clamp(GetHealth() + GetHealthRegenRate(), 0.0f, GetMaxHealth()));
+	}
+	if (GetMana() < GetMaxMana())
+	{
+		AttributeSet->SetMana(FMath::Clamp(GetMana() + GetManaRegenRate(), 0.0f, GetMaxMana()));
+	}
 }

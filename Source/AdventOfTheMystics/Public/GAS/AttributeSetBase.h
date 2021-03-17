@@ -66,7 +66,7 @@ public:
 		GAMEPLAYATTRIBUTE_REPNOTIFY(UAttributeSetBase, HealthRegenRate, OldHealthRegenRate);
 	}
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Attributes | HealthRegenRate", ReplicatedUsing = OnRep_ManaRegenRate)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Attributes | ManaRegenRate", ReplicatedUsing = OnRep_ManaRegenRate)
 	FGameplayAttributeData ManaRegenRate;
 	ATTRIBUTE_ACCESSORS(UAttributeSetBase, ManaRegenRate)
 	UFUNCTION()

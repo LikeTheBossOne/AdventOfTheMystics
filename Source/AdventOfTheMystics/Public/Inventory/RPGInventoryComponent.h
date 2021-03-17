@@ -17,11 +17,20 @@ class ADVENTOFTHEMYSTICS_API URPGInventoryComponent : public UActorComponent
 public:	
 	URPGInventoryComponent();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
+	bool InsertItem(class URPGItem* Item, int Index);
+	
+	UFUNCTION(BlueprintCallable)
 	bool AddItem(class URPGItem* Item);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	bool RemoveItem(class URPGItem* Item);
+
+	UFUNCTION(BlueprintCallable)
+	class URPGItem* RemoveItemAtIndex(int Index);
+
+	UFUNCTION(BlueprintCallable)
+	class URPGItem* ReplaceItem(class URPGItem* ItemToAdd, int indexToReplace);
 
 protected:
 	virtual void BeginPlay() override;

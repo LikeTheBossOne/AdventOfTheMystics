@@ -1,12 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "../Public/Characters/PlayerCharacter.h"
+#include "Characters/PlayerCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "../Public/GAS/AttributeSetBase.h"
-#include "../Public/Inventory/RPGInventoryComponent.h"
+#include "GAS/AttributeSetBase.h"
+#include "Inventory/RPGInventoryComponent.h"
 
 APlayerCharacter::APlayerCharacter() : Super()
 {
@@ -21,8 +21,8 @@ APlayerCharacter::APlayerCharacter() : Super()
 	Inventory = CreateDefaultSubobject<URPGInventoryComponent>(TEXT("Inventory"));
 	Inventory->MaxSize = 20;
 
-	HotbarInventory = CreateDefaultSubobject<URPGInventoryComponent>(TEXT("HotbarInventory"));
-	HotbarInventory->MaxSize = 5;
+	HandInventory = CreateDefaultSubobject<URPGInventoryComponent>(TEXT("HotbarInventory"));
+	HandInventory->MaxSize = 5;
 
 	
 	// Don't Rotate when the controller rotates. Let that just affect the camera.
