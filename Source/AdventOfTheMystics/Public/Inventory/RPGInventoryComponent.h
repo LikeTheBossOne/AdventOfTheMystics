@@ -6,6 +6,9 @@
 #include "Components/ActorComponent.h"
 #include "RPGInventoryComponent.generated.h"
 
+
+class URPGItem;
+
 // Blueprints will bind to this to update their UI
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnInventoryUpdated);
 
@@ -18,19 +21,25 @@ public:
 	URPGInventoryComponent();
 
 	UFUNCTION(BlueprintCallable)
-	bool InsertItem(class URPGItem* Item, int Index);
+	bool InsertItem(URPGItem* Item, int Index);
 	
 	UFUNCTION(BlueprintCallable)
-	bool AddItem(class URPGItem* Item);
+	bool AddItem(URPGItem* Item);
 
 	UFUNCTION(BlueprintCallable)
-	bool RemoveItem(class URPGItem* Item);
+	bool RemoveItem(URPGItem* Item);
 
 	UFUNCTION(BlueprintCallable)
-	class URPGItem* RemoveItemAtIndex(int Index);
+	URPGItem* RemoveItemAtIndex(int Index);
 
 	UFUNCTION(BlueprintCallable)
-	class URPGItem* ReplaceItem(class URPGItem* ItemToAdd, int indexToReplace);
+	URPGItem* ReplaceItem(URPGItem* ItemToAdd, int indexToReplace);
+
+	UFUNCTION(BlueprintCallable)
+	virtual TArray<URPGItem*> GetItems();
+
+	UFUNCTION(BlueprintCallable)
+	virtual TArray<URPGItem*> GetAllItems();
 
 protected:
 	virtual void BeginPlay() override;
@@ -43,8 +52,8 @@ public:
 	FOnInventoryUpdated OnInventoryUpdated;
 	
 	UPROPERTY(EditDefaultsOnly, Instanced, Category = "Items")
-	TArray<class URPGItem*> DefaultItems;
+	TArray<URPGItem*> DefaultItems;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Items")
-	TArray<class URPGItem*> Items;
+	UPROPERTY(VisibleAnywhere, Category = "Items")
+	TArray<URPGItem*> Items;
 };

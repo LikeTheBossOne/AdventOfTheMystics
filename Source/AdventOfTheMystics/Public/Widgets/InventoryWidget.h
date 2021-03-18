@@ -6,7 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "InventoryWidget.generated.h"
 
-class URPGInventoryComponent;
+class UCharacterInventoryComponent;
 
 /**
  * 
@@ -18,17 +18,11 @@ class ADVENTOFTHEMYSTICS_API UInventoryWidget : public UUserWidget
 public:
 	void NativeConstruct() override;
 	
-	UFUNCTION(BlueprintCallable)
-	void UpdateHandItem(int HandIndex, int InventoryIndex);
-	
 	UFUNCTION(BlueprintNativeEvent)
 	void InitializeInventory();
 	virtual void InitializeInventory_Implementation();
 	
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
-	URPGInventoryComponent* PlayerInventory;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
-	URPGInventoryComponent* PlayerHandInventory;
+	UCharacterInventoryComponent* PlayerInventory;
 };

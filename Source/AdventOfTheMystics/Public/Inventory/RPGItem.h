@@ -41,7 +41,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item")
 	class UTexture2D* Thumbnail;
 	
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 	class URPGInventoryComponent* OwningInventory;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item")

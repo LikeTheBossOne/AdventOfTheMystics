@@ -3,7 +3,7 @@
 
 #include "Widgets/InventoryWidget.h"
 #include "Characters/PlayerCharacter.h"
-#include "Inventory/RPGInventoryComponent.h"
+#include "Inventory/CharacterInventoryComponent.h"
 
 void UInventoryWidget::NativeConstruct()
 {
@@ -15,24 +15,9 @@ void UInventoryWidget::NativeConstruct()
 	check(Player)
 
 	PlayerInventory = Player->GetInventory();
-	PlayerHandInventory = Player->GetHandInventory();
 	PlayerInventory->OnInventoryUpdated.AddDynamic(this, &UInventoryWidget::InitializeInventory);
 	
 	InitializeInventory();
-
-}
-
-void UInventoryWidget::UpdateHandItem(int HandIndex, int InventoryIndex)
-{
-	URPGItem* InvItem = PlayerInventory->RemoveItemAtIndex(InventoryIndex);
-	if (InvItem)
-	{
-		URPGItem* HandItem = PlayerHandInventory->ReplaceItem(InvItem, HandIndex);
-		if (HandItem)
-		{
-			PlayerInventory->InsertItem(HandItem, InventoryIndex);
-		}
-	}
 }
 
 void UInventoryWidget::InitializeInventory_Implementation()

@@ -109,3 +109,13 @@ URPGItem* URPGInventoryComponent::ReplaceItem(URPGItem* ItemToAdd, int indexToRe
 
 	return nullptr;
 }
+
+TArray<URPGItem*> URPGInventoryComponent::GetItems()
+{
+	return Items;
+}
+
+TArray<URPGItem*> URPGInventoryComponent::GetAllItems()
+{
+	return Items;
+}

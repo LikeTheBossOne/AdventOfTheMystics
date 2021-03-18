@@ -6,7 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GAS/AttributeSetBase.h"
-#include "Inventory/RPGInventoryComponent.h"
+#include "Inventory/CharacterInventoryComponent.h"
 
 APlayerCharacter::APlayerCharacter() : Super()
 {
@@ -18,11 +18,8 @@ APlayerCharacter::APlayerCharacter() : Super()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
-	Inventory = CreateDefaultSubobject<URPGInventoryComponent>(TEXT("Inventory"));
+	Inventory = CreateDefaultSubobject<UCharacterInventoryComponent>(TEXT("Inventory"));
 	Inventory->MaxSize = 20;
-
-	HandInventory = CreateDefaultSubobject<URPGInventoryComponent>(TEXT("HotbarInventory"));
-	HandInventory->MaxSize = 5;
 
 	
 	// Don't Rotate when the controller rotates. Let that just affect the camera.
