@@ -81,7 +81,7 @@ URPGItem* URPGInventoryComponent::RemoveItemAtIndex(int Index)
 	{
 		OldItem->OwningInventory = nullptr;
 		OldItem->World = nullptr;
-		Items.RemoveSingle(OldItem);
+		Items.RemoveAt(Index);
 		OnInventoryUpdated.Broadcast();
 		return OldItem;
 	}

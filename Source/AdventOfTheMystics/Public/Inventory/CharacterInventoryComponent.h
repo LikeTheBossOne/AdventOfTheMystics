@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Inventory/RPGInventoryComponent.h"
+#include "RPGInventoryComponent.h"
 #include "CharacterInventoryComponent.generated.h"
 
 UENUM(BlueprintType)

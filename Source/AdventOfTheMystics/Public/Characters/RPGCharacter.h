@@ -19,4 +19,8 @@ class ADVENTOFTHEMYSTICS_API ARPGCharacter : public ACharacter
 public:
 	ARPGCharacter();
 	virtual void Tick(float DeltaTime) override;
+
+public:
+	UPROPERTY(EditAnywhere)
+	int Gold;
 };
